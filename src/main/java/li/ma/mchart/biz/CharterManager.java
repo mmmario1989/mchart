@@ -1,6 +1,6 @@
-package li.ma.mchart.main;
+package li.ma.mchart.biz;
 
-import li.ma.mchart.enums.CharterEnums;
+import li.ma.mchart.common.enums.CharterEnums;
 import org.springframework.web.socket.*;
 
 import javax.websocket.server.ServerEndpoint;

@@ -1,7 +1,7 @@
 package li.ma.mchart.dao;
 
-import li.ma.mchart.entity.Charter;
-import li.ma.mchart.entity.Group;
+import li.ma.mchart.dao.entity.Charter;
+import li.ma.mchart.dao.entity.Group;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,7 +36,7 @@ public class CharterRespositoryTest {
     @Transactional
     public void find(){
 
-//        List<Charter> list = (List<Charter>) repository.findAll();
+//        List<CharterSession> list = (List<CharterSession>) repository.findAll();
 //        System.out.println(123);
 
         Charter charter = repository.findByAccount("c1");

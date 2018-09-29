@@ -1,6 +1,6 @@
-package li.ma.mchart.enums;
+package li.ma.mchart.common.enums;
 
-import li.ma.mchart.main.Charter;
+import li.ma.mchart.biz.CharterSession;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.web.socket.TextMessage;
@@ -19,7 +19,7 @@ public enum  CharterGroup {
 
     private List<CharterEnums> charterList;
 
-    public void join(Charter charter) throws IOException {
+    public void join(CharterSession charter) throws IOException {
         charterList.add(CharterEnums.getCharter(charter.getAccount()));
         for (CharterEnums charterE : charterList) {
             charterE.receive(new TextMessage("欢迎 "+charterE.getNickname()+" 加入！"));

@@ -1,8 +1,8 @@
-package li.ma.mchart.main;
+package li.ma.mchart.biz;
 
 import org.springframework.web.socket.WebSocketMessage;
 
-public interface Charter {
+public interface CharterSession {
 
     void receive(WebSocketMessage<?> msg) throws Exception;
 

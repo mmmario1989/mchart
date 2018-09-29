@@ -1,8 +1,7 @@
 package li.ma.mchart.dao;
 
-import com.alibaba.druid.sql.visitor.functions.Char;
-import li.ma.mchart.entity.Charter;
-import li.ma.mchart.entity.Group;
+import li.ma.mchart.dao.entity.Charter;
+import li.ma.mchart.dao.entity.Group;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

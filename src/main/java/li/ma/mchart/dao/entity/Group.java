@@ -1,4 +1,4 @@
-package li.ma.mchart.entity;
+package li.ma.mchart.dao.entity;
 
 
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package li.ma.mchart.enums;
+package li.ma.mchart.common.enums;
 
-import li.ma.mchart.main.Charter;
+import li.ma.mchart.biz.CharterSession;
 import lombok.Getter;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -9,7 +9,7 @@ import java.io.IOException;
 
 
 @Getter
-public enum CharterEnums implements Charter {
+public enum CharterEnums implements CharterSession {
 
     C1("test","123","tester", CharterGroup.GROUP1),
     C2("test1","123","tester1",CharterGroup.GROUP1);
