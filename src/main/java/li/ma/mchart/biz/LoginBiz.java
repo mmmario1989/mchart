@@ -6,6 +6,11 @@ import li.ma.mchart.dao.entity.Charter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @Author: mario
+ * @Date: 2018-09-30 10:33 AM
+ * @Description:
+ */
 @Service
 public class LoginBiz {
 
@@ -18,5 +23,7 @@ public class LoginBiz {
         }
         charterRepository.save(charter);
     }
+
+
 
 }

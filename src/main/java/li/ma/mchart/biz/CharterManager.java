@@ -5,6 +5,11 @@ import org.springframework.web.socket.*;
 
 import javax.websocket.server.ServerEndpoint;
 
+/**
+ * @Author: mario
+ * @Date: 2018-09-30 10:33 AM
+ * @Description:
+ */
 @ServerEndpoint("/chart")
 public class CharterManager implements WebSocketHandler {
 

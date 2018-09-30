@@ -1,5 +1,9 @@
 package li.ma.mchart.common.exception;
-
+/**
+ * @Author: mario
+ * @Date: 2018-09-30 10:33 AM
+ * @Description:
+ */
 public class BizException extends Exception {
 
     public BizException() {

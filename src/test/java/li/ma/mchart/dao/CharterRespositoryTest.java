@@ -23,7 +23,7 @@ public class CharterRespositoryTest {
     @Before
     public void init() {
         charter = new Charter();
-        charter.setAccount("555");
+        charter.setAccount("777");
         charter.setNickname("tester");
         charter.setPassword("123");
     }

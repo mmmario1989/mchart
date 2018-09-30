@@ -11,7 +11,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * @Author: mario
+ * @Date: 2018-09-30 10:33 AM
+ * @Description:
+ */
 @Entity
 @Getter
 @Setter

@@ -9,7 +9,11 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * @Author: mario
+ * @Date: 2018-09-30 10:33 AM
+ * @Description:
+ */
 @Entity
 @Setter
 @Getter

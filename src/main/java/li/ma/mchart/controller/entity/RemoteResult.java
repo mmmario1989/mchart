@@ -1,7 +1,11 @@
 package li.ma.mchart.controller.entity;
 
 import lombok.Data;
-
+/**
+ * @Author: mario
+ * @Date: 2018-09-30 10:33 AM
+ * @Description:
+ */
 @Data
 public class RemoteResult<T> {
 
