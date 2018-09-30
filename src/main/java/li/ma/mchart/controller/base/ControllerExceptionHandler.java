@@ -1,5 +1,6 @@
 package li.ma.mchart.controller.base;
 
+import io.jsonwebtoken.SignatureException;
 import li.ma.mchart.common.exception.BizException;
 import li.ma.mchart.controller.entity.RemoteResult;
 import lombok.extern.slf4j.Slf4j;
@@ -34,5 +35,10 @@ public class ControllerExceptionHandler {
     public RemoteResult handlerException(Exception e){
         log.error(e.getMessage(),e);
         return RemoteResult.failed(false,e.getMessage());
+    }
+    @ExceptionHandler(SignatureException.class)
+    public RemoteResult handlerUnauthorized(SignatureException e){
+        log.warn(e.getMessage());
+        return RemoteResult.unauthorized();
     }
 }

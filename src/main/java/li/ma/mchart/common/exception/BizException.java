@@ -14,6 +14,9 @@ public class BizException extends Exception {
     public BizException() {
     }
 
+    public BizException(String message) {
+        this(message, "");
+    }
     public BizException(String message,String logMsg) {
         super(message);
         this.logMsg = logMsg;
