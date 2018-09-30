@@ -19,9 +19,21 @@ public class LoginBiz {
 
     public void regist(Charter charter) throws BizException {
         if(charterRepository.existsByAccount(charter.getAccount())){
-            throw new BizException("账号已存在");
+            throw new BizException("账号已存在","account:"+charter.getAccount());
         }
         charterRepository.save(charter);
+    }
+
+
+    public Charter login(String account,String pwd) throws BizException {
+        Charter charter = charterRepository.findByAccount(account);
+        if(charter==null){
+            throw new BizException("账号不存在","account:"+account);
+        }
+        if(!charter.getPassword().equals(pwd)){
+            throw new BizException("密码错误","account:"+account);
+        }
+        return charter;
     }
 
 

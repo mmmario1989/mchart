@@ -39,7 +39,7 @@ public class CharterRespositoryTest {
 //        List<CharterSession> list = (List<CharterSession>) repository.findAll();
 //        System.out.println(123);
 
-        Charter charter = repository.findByAccount("c1");
+        Charter charter = repository.findByAccount("ddd");
         Group group = charter.getGroups().iterator().next();
         group.setNotice("notice");
         groupRepository.save(group);

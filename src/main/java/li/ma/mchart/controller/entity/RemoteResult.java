@@ -9,6 +9,11 @@ import lombok.Data;
 @Data
 public class RemoteResult<T> {
 
+
+    private static final int SUCEED = 200;
+    private static final int FAILED_BIZ = 501;
+    private static final int FAILED_SERVER = 500;
+
     private int code;
     private String msg;
     private T data;
@@ -18,16 +23,16 @@ public class RemoteResult<T> {
 
     public static<T> RemoteResult<T> succeed(T data){
         RemoteResult<T> res = new RemoteResult<>();
-        res.code=200;
+        res.code=SUCEED;
         res.msg="success";
         res.data=data;
         return res;
     }
 
-    public static <T> RemoteResult<T> failed(int code,String msg){
+    public static <T> RemoteResult<T> failed(boolean biz,String msg){
         RemoteResult<T> res = new RemoteResult<>();
-        res.setCode(code);
-        res.setMsg(msg);
+        res.setCode(biz?FAILED_BIZ:FAILED_SERVER);
+        res.setMsg(biz?msg:"内部错误，请稍后再试...");
         return res;
     }
 
