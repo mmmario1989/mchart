@@ -18,26 +18,50 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ControllerExceptionHandler {
 
 
-    @ExceptionHandler({BizException.class, BindException.class})
-    public RemoteResult handleBizException(Exception e){
-        String msg = null;
-        if(e instanceof BizException){
-            log.warn(e.getMessage()+"["+((BizException)e).getLogMsg()+"]");
-            msg = e.getMessage();
-        }else if(e instanceof BindException){
-            log.warn(e.getMessage());
-            msg = ((BindException) e).getFieldError().getDefaultMessage();
-        }
-        return RemoteResult.failed(true,msg);
+    /**
+     * 业务异常
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BizException.class)
+    public RemoteResult handleBizException(BizException e) {
+        log.warn(e.getMessage() + "[" + e.getLogMsg() + "]");
+        return RemoteResult.failed(true, e.getMessage());
     }
 
-    @ExceptionHandler(Exception.class)
-    public RemoteResult handlerException(Exception e){
-        log.error(e.getMessage(),e);
-        return RemoteResult.failed(false,e.getMessage());
+    /**
+     * 参数校验异常
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BindException.class)
+    public RemoteResult handleBindException(BindException e) {
+        log.warn(e.getMessage());
+        return RemoteResult.failed(true, e.getFieldError().getDefaultMessage());
     }
+
+    /**
+     * 服务器其他异常
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(Exception.class)
+    public RemoteResult handlerException(Exception e) {
+        log.error(e.getMessage(), e);
+        return RemoteResult.failed(false, e.getMessage());
+    }
+
+    /**
+     * 鉴权不通过
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler(SignatureException.class)
-    public RemoteResult handlerUnauthorized(SignatureException e){
+    public RemoteResult handlerUnauthorized(SignatureException e) {
         log.warn(e.getMessage());
         return RemoteResult.unauthorized();
     }
