@@ -43,8 +43,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public Object login(String account,
-                        String pwd) throws BizException {
+    public Object login(String account,String pwd,String imei) throws BizException {
         if(account==null || account.trim().isEmpty()){
             throw new BizException("账号不能为空");
         }
@@ -57,6 +56,7 @@ public class LoginController {
                 .claim("charterId",charter.getId())
                 .claim("account",charter.getAccount())
                 .claim("nickname",charter.getNickname())
+                .claim("imei",imei)
                 .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, Constant.SECRET_KEY)
                 .compact();
