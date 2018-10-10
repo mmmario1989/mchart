@@ -62,16 +62,6 @@ public class LoginController {
                 .compact();
     }
 
-    public static void main(String[] args) {
-        String token = Jwts.builder()
-                .claim("account","li.ma")
-                .claim("charterId",123)
-                .setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, Constant.SECRET_KEY)
-                .compact();
-        Jwt jwt = Jwts.parser().setSigningKey("1QAZ@wsx").parse(token);
-        System.out.println(Jwts.parser().setSigningKey("1QAZ@wsx").isSigned(token));
-    }
 
 
 }

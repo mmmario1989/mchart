@@ -1,5 +1,9 @@
 package li.ma.mchart.common;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureException;
 import lombok.Data;
 
 /**
@@ -25,12 +29,26 @@ public class LoginContext {
         context.remove();
     }
 
-    public static void set(Integer charterId,String account,String nickname,String imei){
+    private static void set(Integer charterId,String account,String nickname,String imei){
         LoginContext loginContext = new LoginContext();
         loginContext.setCharterId(charterId);
         loginContext.setAccount(account);
         loginContext.setNickname(nickname);
         loginContext.setImei(imei);
         context.set(loginContext);
+    }
+
+    public static void authorize(String token){
+        if(token==null){
+            throw new SignatureException("null token");
+        }
+        Jwt jwt = Jwts.parser().setSigningKey(Constant.SECRET_KEY).parse(token);
+        Claims claims = (Claims) jwt.getBody();
+        set(
+                claims.get("charterId",Integer.class),
+                claims.get("account",String.class),
+                claims.get("nickname",String.class),
+                claims.get("imei",String.class)
+        );
     }
 }
