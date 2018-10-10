@@ -18,8 +18,8 @@ import javax.websocket.server.ServerEndpoint;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 @Slf4j
-@Component
 @ServerEndpoint("/webSocket/{groupId}")
+@Component
 public class WebSocket {
 
     private Session session;

@@ -25,6 +25,7 @@ import javax.websocket.server.ServerEndpoint;
  * @Description:
  */
 @ServerEndpoint("/connect/{groupId}")
+@Component
 public class ConnectController {
     @Autowired
     private SessionManager sessionManager;
