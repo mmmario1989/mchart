@@ -76,7 +76,7 @@ public class ChartSession {
 
         private static synchronized void put(ChartSession session) {
             sessionMap.put(session.getGroupId(), session);
-            dispatch(session.getGroupId(),"Welcome "+session.getNickname()+"!");
+            dispatch(session.getGroupId(),session.getNickname()+" is coming!");
             log.info("===>"+session.getNickname()+"---"+session.getGroupId());
         }
 
@@ -87,6 +87,7 @@ public class ChartSession {
                 return;
             }
             sessions.remove(session);
+            dispatch(session.getGroupId(),session.getNickname()+" is leaving!");
             log.info(session.getNickname()+"---"+session.getGroupId()+"===>");
         }
 
