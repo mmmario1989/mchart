@@ -40,6 +40,9 @@ public class WebSocket {
         this.session=session;
         webSockets.add(this);
         log.info("有新的连接，总数"+webSockets.size());
+        if (LoginContext.get()==null){
+            return;
+        }
         Charter charter = charterRepository.findByAccount(LoginContext.get().getAccount());
         Group group = groupRepository.findById(groupId).get();
         sessionManager.put(
@@ -61,8 +64,10 @@ public class WebSocket {
 
     @OnMessage
     public void onMessage(@PathParam("groupId") Integer groupId,String message){
-        sessionManager.dispatch(groupId,message);
         send(message);
+        if (sessionManager!=null){
+            sessionManager.dispatch(groupId,message);
+        }
     }
 
     public void send(String message){
