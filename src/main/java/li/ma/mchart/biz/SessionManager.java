@@ -42,7 +42,7 @@ public class SessionManager {
         }
     }
 
-    public void dispatch(Integer groupId,WebSocketMessage msg){
+    public void dispatch(Integer groupId,String msg){
         Collection<ChartSession> sessions = sessionMap.get(groupId);
         for(ChartSession session:sessions){
             try {

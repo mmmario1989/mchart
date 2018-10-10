@@ -20,19 +20,21 @@ public class AuthorizeInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        String token = request.getHeader("Authorization");
-        if(token==null){
-            throw new SignatureException("null token");
-        }
-        Jwt jwt = Jwts.parser().setSigningKey(Constant.SECRET_KEY).parse(token);
-        Claims claims = (Claims) jwt.getBody();
-        LoginContext.set(
-                claims.get("charterId",Integer.class),
-                claims.get("account",String.class),
-                claims.get("nickname",String.class),
-                claims.get("imei",String.class)
-        );
+//
+//        String token = request.getHeader("Authorization");
+//        if(token==null){
+//            token = request.getParameter("token");
+//            if(token==null)
+//                throw new SignatureException("null token");
+//        }
+//        Jwt jwt = Jwts.parser().setSigningKey(Constant.SECRET_KEY).parse(token);
+//        Claims claims = (Claims) jwt.getBody();
+//        LoginContext.set(
+//                claims.get("charterId",Integer.class),
+//                claims.get("account",String.class),
+//                claims.get("nickname",String.class),
+//                claims.get("imei",String.class)
+//        );
         return true;
     }
 

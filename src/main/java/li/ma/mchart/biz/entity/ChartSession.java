@@ -4,8 +4,8 @@ import li.ma.mchart.dao.entity.Charter;
 import li.ma.mchart.dao.entity.Group;
 import lombok.Builder;
 import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
 
+import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -19,7 +19,7 @@ public class ChartSession {
 
     private Charter charter;
     private Group group;
-    private WebSocketSession socketSession;
+    private Session session;
     private String imei;
 
 
@@ -31,8 +31,8 @@ public class ChartSession {
         return group.getId()+"_"+charter.getId()+"_"+imei;
     }
 
-    public void receive(WebSocketMessage message) throws IOException {
-        socketSession.sendMessage(message);
+    public void receive(String message) throws IOException {
+        session.getAsyncRemote().sendText(message);
     }
 
 
