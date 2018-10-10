@@ -62,8 +62,18 @@ public class WebSocket {
     @OnMessage
     public void onMessage(@PathParam("groupId") Integer groupId,String message){
         sessionManager.dispatch(groupId,message);
+        send(message);
     }
 
+    public void send(String message){
+        for (WebSocket webSocket:webSockets){
+            try {
+                webSocket.session.getBasicRemote().sendText(message);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 
 
 }
