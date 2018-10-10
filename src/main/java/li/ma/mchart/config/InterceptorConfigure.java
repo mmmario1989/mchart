@@ -1,4 +1,4 @@
-package li.ma.mchart;
+package li.ma.mchart.config;
 
 import li.ma.mchart.inter.AuthorizeInterceptor;
 import org.springframework.context.annotation.Configuration;

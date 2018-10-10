@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class ControllerAspect {
 
 
-    @Around("execution(* li.ma.mchart.controller.*.*(..))")
+    @Around("execution(* li.ma.mchart.controller.LoginController*.*(..))")
     public RemoteResult remoteResultPoint(ProceedingJoinPoint point) throws Throwable {
             return RemoteResult.succeed(point.proceed());
     }
