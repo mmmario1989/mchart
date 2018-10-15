@@ -5,10 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 /**
@@ -28,7 +25,7 @@ public class Charter extends BaseEntity {
     private String password;
     private String nickname;
 
-    @ManyToMany(mappedBy = "charters",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "charters",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Group> groups = new HashSet<>();
 
 }

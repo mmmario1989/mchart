@@ -8,4 +8,5 @@ package li.ma.mchart.common;
 public class Constant {
 
     public static final String SECRET_KEY="1QAZ@wsx";
+    public static final String SERVER="server";
 }
