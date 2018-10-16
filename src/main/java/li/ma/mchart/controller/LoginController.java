@@ -1,7 +1,6 @@
 package li.ma.mchart.controller;
 
 import com.alibaba.fastjson.JSON;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import li.ma.mchart.biz.LoginBiz;

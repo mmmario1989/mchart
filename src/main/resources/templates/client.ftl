@@ -75,8 +75,8 @@
                  if(res.code===200){
                      localStorage.setItem("token",res.data);
                      base64=new Base64();
-                     info = JSON.parse(base64.decode(res.data.split('.')[1]).replace('\0\0',''));
-                     websocket = new WebSocket("ws://localhost:8080/connect/"+res.data);
+                     info = JSON.parse(base64.decode(res.data.split('.')[1]).replace('\0',''));
+                     websocket = new WebSocket("ws://a77ccaf2.ngrok.io/connect/"+res.data);
                      fromAccount=info.account;
                      fromNickname=info.nickname;
                      connect();
@@ -100,7 +100,13 @@
  <button onclick="login()">login</button><br/>
  <hr/>
  toGroupId<input id="group"/><br/>
- <textarea id="text" rows=10 cols=50 ></textarea><br/>
+ <textarea id="text" rows=10 cols=50 onkeyup="new function enter(e) {
+        var event = window.event||e;
+        var code = event.keyCode||event.witch;
+        if(code===13){
+            send();
+        }
+         }"></textarea><br/>
  <button onclick="send()">发送消息</button>
  <hr/>
  <button onclick="closeWebSocket()">关闭WebSocket连接</button>
