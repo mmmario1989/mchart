@@ -3,6 +3,7 @@
  <head>
      <title>Java后端WebSocket的Tomcat实现</title>
      <script type="text/javascript" src="jquery.js"></script>
+     <script type="text/javascript" src="base64.js"></script>
      <script type="text/javascript">
          var websocket = null;
          var fromAccount;
@@ -23,17 +24,19 @@
              //连接成功建立的回调方法
              websocket.onopen = function () {
                  setMessageInnerHTML("WebSocket连接成功");
-             }
+             };
 
              //接收到消息的回调方法
              websocket.onmessage = function (event) {
-                 setMessageInnerHTML(event.data);
-             }
+                 var msg = JSON.parse(event.data);
+                 var str="--"+new Date(msg.time).toLocaleString()+"-- "+msg.fromNickname+" : "+msg.data;
+                 setMessageInnerHTML(str);
+             };
 
              //连接关闭的回调方法
              websocket.onclose = function () {
                  setMessageInnerHTML("WebSocket连接关闭");
-             }
+             };
 
              //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
              window.onbeforeunload = function () {
@@ -60,20 +63,24 @@
                  "fromAccount":fromAccount,
                  "fromNickname":fromNickname,
                  "toGroupId":group,
-                 "data":data
+                 "data":data,
+                 'time':new Date().getTime()
              };
              websocket.send(JSON.stringify(msg));
+             $('#text').val('');
          }
 
          function login() {
              $.post('/auth/login',$("#form").serialize(),function (res) {
-                 if(res.code=='200'){
-                     alert("登录成功");
+                 if(res.code===200){
+                     localStorage.setItem("token",res.data);
+                     base64=new Base64();
+                     info = JSON.parse(base64.decode(res.data.split('.')[1]).replace('\0\0',''));
                      websocket = new WebSocket("ws://localhost:8080/connect/"+res.data);
-                     fromAccount='c3';
-                     fromNickname='nnn';
+                     fromAccount=info.account;
+                     fromNickname=info.nickname;
                      connect();
-
+                     alert("登录成功");
                  }else {
                      alert("登录失败："+res.msg);
                  }
@@ -92,7 +99,7 @@
  </form>
  <button onclick="login()">login</button><br/>
  <hr/>
- to<input id="group"/><br/>
+ toGroupId<input id="group"/><br/>
  <textarea id="text" rows=10 cols=50 ></textarea><br/>
  <button onclick="send()">发送消息</button>
  <hr/>

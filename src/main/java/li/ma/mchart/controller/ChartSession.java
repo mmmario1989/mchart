@@ -26,6 +26,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * @Author: mario
@@ -43,6 +44,7 @@ public class ChartSession implements ApplicationContextAware {
     private String nickname;
     private String account;
     private Session session;
+    private Charter charter;
 
     private static ApplicationContext context;
 
@@ -61,6 +63,7 @@ public class ChartSession implements ApplicationContextAware {
         this.imei = LoginContext.get().getImei();
 
         Charter charter = context.getBean(CharterRepository.class).findByAccount(this.account);
+        this.charter=charter;
         SessionManager.join(charter.getGroups(),this);
     }
 
@@ -96,13 +99,14 @@ public class ChartSession implements ApplicationContextAware {
 
         private static synchronized void join(Collection<Group> groups,ChartSession session) {
             for(Group group:groups){
-                sessionMap.put(group.getId(), session);
                 ChartMessage message = new ChartMessage();
                 message.setData(session.getNickname()+" is coming!");
                 message.setFromAccount(Constant.SERVER);
                 message.setFromNickname(Constant.SERVER);
                 message.setToGroupId(group.getId());
+                message.setTime(new Date().getTime());
                 dispatch(message);
+                sessionMap.put(group.getId(), session);
                 log.info("===>"+session.getAccount()+"---"+session.getNickname());
             }
         }
@@ -120,6 +124,7 @@ public class ChartSession implements ApplicationContextAware {
                 message.setFromAccount(Constant.SERVER);
                 message.setFromNickname(Constant.SERVER);
                 message.setToGroupId(group.getId());
+                message.setTime(new Date().getTime());
                 dispatch(message);
                 log.info(session.getAccount()+"---"+session.getNickname()+"===>");
             }

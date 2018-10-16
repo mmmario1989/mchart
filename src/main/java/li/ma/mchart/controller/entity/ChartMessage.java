@@ -14,4 +14,5 @@ public class ChartMessage {
     private String fromNickname;
     private Integer toGroupId;
     private String data;
+    private Long time;
 }
