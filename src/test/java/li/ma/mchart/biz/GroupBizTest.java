@@ -1,6 +1,6 @@
 package li.ma.mchart.biz;
 
-import li.ma.mchart.dao.entity.Charter;
+import li.ma.mchart.dao.entity.Group;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +14,13 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest()
-public class CharterBizTest {
+public class GroupBizTest {
     @Autowired
-    private GroupBiz charterBiz;
+    private GroupBiz groupBiz;
     @Test
     public void test(){
-        Charter charter1 =charterBiz.findById("ying");
-        Charter charter2 = charterBiz.findById("ying");
+        Group group1 = groupBiz.findById(23);
+        Group group2 = groupBiz.findById(23);
         System.out.println();
     }
 }
