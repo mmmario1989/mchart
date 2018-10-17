@@ -14,8 +14,10 @@
          else {
              alert('当前浏览器 Not support websocket')
          }
-         function connect() {
 
+         function connect() {
+             var token = localStorage.getItem("token");
+             websocket = new WebSocket("ws://localhost:8080/connect/" + token);
              //连接发生错误的回调方法
              websocket.onerror = function () {
                  setMessageInnerHTML("WebSocket连接发生错误");
@@ -29,13 +31,14 @@
              //接收到消息的回调方法
              websocket.onmessage = function (event) {
                  var msg = JSON.parse(event.data);
-                 var str="--"+new Date(msg.time).toLocaleString()+"-- "+msg.fromNickname+" : "+msg.data;
+                 var str = "--" + new Date(msg.time).toLocaleString() + "-- " + msg.fromNickname + " : " + msg.data;
                  setMessageInnerHTML(str);
              };
 
              //连接关闭的回调方法
              websocket.onclose = function () {
-                 setMessageInnerHTML("WebSocket连接关闭");
+                 setMessageInnerHTML("WebSocket连接断开");
+                 connect();
              };
 
              //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
@@ -45,6 +48,7 @@
 
 
          }
+
          //将消息显示在网页上
          function setMessageInnerHTML(innerHTML) {
              document.getElementById('message').innerHTML += innerHTML + '<br/>';
@@ -60,29 +64,28 @@
              group = $("#group").val();
              var data = document.getElementById('text').value;
              var msg = {
-                 "fromAccount":fromAccount,
-                 "fromNickname":fromNickname,
-                 "toGroupId":group,
-                 "data":data,
-                 'time':new Date().getTime()
+                 "fromAccount": fromAccount,
+                 "fromNickname": fromNickname,
+                 "toGroupId": group,
+                 "data": data,
+                 'time': new Date().getTime()
              };
              websocket.send(JSON.stringify(msg));
              $('#text').val('');
          }
 
          function login() {
-             $.post('/auth/login',$("#form").serialize(),function (res) {
-                 if(res.code===200){
-                     localStorage.setItem("token",res.data);
-                     base64=new Base64();
-                     info = JSON.parse(base64.decode(res.data.split('.')[1]).replace('\0',''));
-                     websocket = new WebSocket("ws://localhost:8080/connect/"+res.data);
-                     fromAccount=info.account;
-                     fromNickname=info.nickname;
+             $.post('/auth/login', $("#form").serialize(), function (res) {
+                 if (res.code === 200) {
+                     localStorage.setItem("token", res.data);
+                     base64 = new Base64();
+                     info = JSON.parse(base64.decode(res.data.split('.')[1]).replace('\0', ''));
+                     fromAccount = info.account;
+                     fromNickname = info.nickname;
                      connect();
                      alert("登录成功");
-                 }else {
-                     alert("登录失败："+res.msg);
+                 } else {
+                     alert("登录失败：" + res.msg);
                  }
              })
          }
@@ -93,11 +96,12 @@
  <h2>Welcome!</h2>
  <hr>
  <form id="form">
-     account<input name="account" /><br/>
-     password<input name="pwd" type="password" /><br/>
+     account<input name="account"/><br/>
+     password<input name="pwd" type="password"/><br/>
      imei<input name="imei" value="123321"/><br/>
  </form>
- <button onclick="login()">login</button><br/>
+ <button onclick="login()">login</button>
+ <br/>
  <hr/>
  toGroupId<input id="group"/><br/>
  <textarea id="text" rows=10 cols=50 onkeyup="new function enter(e) {

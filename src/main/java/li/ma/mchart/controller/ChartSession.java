@@ -97,6 +97,9 @@ public class ChartSession implements ApplicationContextAware {
         private static Map<Integer, ChartSession> sessionMap = new HashMap<>();
 
         private static synchronized void join(Collection<Group> groups,ChartSession session) throws BizException {
+            if(sessionMap.containsKey(session.getCharterId())){
+                throw new BizException("该用户已连接");
+            }
             for(Group group:groups){
                 ChartMessage message = new ChartMessage();
                 message.setData(session.getNickname()+" is coming!");
@@ -106,15 +109,15 @@ public class ChartSession implements ApplicationContextAware {
                 message.setTime(new Date().getTime());
                 dispatch(message);
             }
-            if(sessionMap.containsKey(session.getCharterId())){
-                throw new BizException("该用户已连接");
-            }
             sessionMap.put(session.getCharterId(), session);
             log.info("===>"+session.getAccount()+"---"+session.getNickname());
         }
 
 
         private static synchronized void leave(Collection<Group> groups, ChartSession session) {
+            if(sessionMap.get(session.getCharterId())!=session){
+                return;
+            }
             sessionMap.remove(session.getCharterId());
             for(Group group:groups){
                 ChartMessage message = new ChartMessage();
