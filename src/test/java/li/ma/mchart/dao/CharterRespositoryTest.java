@@ -33,18 +33,13 @@ public class CharterRespositoryTest {
         repository.save(charter);
     }
     @Test
-    @Transactional
     public void find(){
 
 //        List<CharterSession> list = (List<CharterSession>) repository.findAll();
 //        System.out.println(123);
 
-        Charter charter = repository.findByAccount("ddd");
-        Group group = charter.getGroups().iterator().next();
-        group.setNotice("notice");
-        groupRepository.save(group);
-        charter.setNickname("222222");
-        repository.save(charter);
+        Charter charter = repository.findByAccount("ying");
+        repository.findByAccount("ying");
         System.out.println();
     }
 

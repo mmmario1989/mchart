@@ -1,10 +1,10 @@
 package li.ma.mchart.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import li.ma.mchart.biz.GroupBiz;
 import li.ma.mchart.common.Constant;
 import li.ma.mchart.common.LoginContext;
+import li.ma.mchart.common.exception.BizException;
 import li.ma.mchart.controller.entity.ChartMessage;
 import li.ma.mchart.dao.CharterRepository;
 import li.ma.mchart.dao.entity.Charter;
@@ -19,9 +19,10 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: mario
@@ -39,11 +40,10 @@ public class ChartSession implements ApplicationContextAware {
     private String nickname;
     private String account;
     private Session session;
-    private Charter charter;
 
     private static ApplicationContext context;
 
-    public void receive(ChartMessage message) throws IOException {
+    public void receive(ChartMessage message) {
         session.getAsyncRemote().sendText(JSON.toJSONString(message));
     }
 
@@ -58,25 +58,22 @@ public class ChartSession implements ApplicationContextAware {
         this.imei = LoginContext.get().getImei();
 
         Charter charter = context.getBean(CharterRepository.class).findByAccount(this.account);
-        this.charter=charter;
         SessionManager.join(charter.getGroups(),this);
     }
 
     @OnMessage
-    public void onMessage(String message) throws Exception {
+    public void onMessage(String message) {
         ChartMessage chartMessage = JSON.parseObject(message,ChartMessage.class);
         SessionManager.dispatch(chartMessage);
     }
 
     @OnError
-    public void onError(Throwable e) throws Exception {
+    public void onError(Throwable e)  {
         log.error(this.getAccount()+" chart session error",e);
-//        Charter charter = context.getBean(CharterRepository.class).findByAccount(this.account);
-//        SessionManager.leave(charter.getGroups(),this);
     }
 
     @OnClose
-    public void onClose() throws Exception {
+    public void onClose()  {
         Charter charter = context.getBean(CharterRepository.class).findByAccount(this.account);
         SessionManager.leave(charter.getGroups(),this);
     }
@@ -87,12 +84,19 @@ public class ChartSession implements ApplicationContextAware {
     }
 
 
+    /**
+     * 管理会话，分发消息
+     */
     @Slf4j
     private static class SessionManager {
 
-        private static Multimap<Integer, ChartSession> sessionMap = HashMultimap.create();
+        /**
+         * key=charterId
+         * value=ChartSession
+         */
+        private static Map<Integer, ChartSession> sessionMap = new HashMap<>();
 
-        private static synchronized void join(Collection<Group> groups,ChartSession session) {
+        private static synchronized void join(Collection<Group> groups,ChartSession session) throws BizException {
             for(Group group:groups){
                 ChartMessage message = new ChartMessage();
                 message.setData(session.getNickname()+" is coming!");
@@ -101,19 +105,18 @@ public class ChartSession implements ApplicationContextAware {
                 message.setToGroupId(group.getId());
                 message.setTime(new Date().getTime());
                 dispatch(message);
-                sessionMap.put(group.getId(), session);
-                log.info("===>"+session.getAccount()+"---"+session.getNickname());
             }
+            if(sessionMap.containsKey(session.getCharterId())){
+                throw new BizException("该用户已连接");
+            }
+            sessionMap.put(session.getCharterId(), session);
+            log.info("===>"+session.getAccount()+"---"+session.getNickname());
         }
 
 
         private static synchronized void leave(Collection<Group> groups, ChartSession session) {
+            sessionMap.remove(session.getCharterId());
             for(Group group:groups){
-                Collection<ChartSession> sessions = sessionMap.get(group.getId());
-                if (sessions == null) {
-                    return;
-                }
-                sessions.remove(session);
                 ChartMessage message = new ChartMessage();
                 message.setData(session.getNickname()+" is leaving!");
                 message.setFromAccount(Constant.SERVER);
@@ -121,19 +124,19 @@ public class ChartSession implements ApplicationContextAware {
                 message.setToGroupId(group.getId());
                 message.setTime(new Date().getTime());
                 dispatch(message);
-                log.info(session.getAccount()+"---"+session.getNickname()+"===>");
             }
+            log.info(session.getAccount()+"---"+session.getNickname()+"===>");
         }
 
         private static void dispatch(ChartMessage msg) {
-            Collection<ChartSession> sessions = sessionMap.get(msg.getToGroupId());
-            for (ChartSession session : sessions) {
-                try {
+            Group group = context.getBean(GroupBiz.class).findById(msg.getToGroupId());
+            for(Charter charter:group.getCharters()){
+                ChartSession session =sessionMap.get(charter.getId());
+                if(session!=null){
                     session.receive(msg);
-                } catch (IOException e) {
-                    log.error("send to " + session.getAccount() + " error", e);
                 }
             }
+
         }
     }
 }

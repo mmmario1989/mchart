@@ -28,4 +28,5 @@ public class Charter extends BaseEntity {
     @ManyToMany(mappedBy = "charters",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Group> groups = new HashSet<>();
 
+
 }
