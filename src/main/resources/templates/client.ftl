@@ -16,8 +16,10 @@
          }
 
          function connect() {
+             var domain = document.domain;
+             console.log(domain);
              var token = localStorage.getItem("token");
-             websocket = new WebSocket("ws://localhost:8080/connect/" + token);
+             websocket = new WebSocket("wss://"+domain+"/connect/" + token);
              //连接发生错误的回调方法
              websocket.onerror = function () {
                  setMessageInnerHTML("WebSocket连接发生错误");
