@@ -1,5 +1,5 @@
 -- auto-generated definition
-create table t_charter
+create table t_chatter
 (
   id       int auto_increment
     primary key,
@@ -26,15 +26,15 @@ create table t_group
 );
 
 -- auto-generated definition
-create table t_group_charter
+create table t_group_chatter
 (
   group_id   int default '0'                    not null,
-  charter_id int default '0'                    not null,
+  chatter_id int default '0'                    not null,
   created    datetime default CURRENT_TIMESTAMP null,
   modified   datetime default CURRENT_TIMESTAMP null,
-  primary key (group_id, charter_id),
-  constraint fk_charterid
-  foreign key (charter_id) references t_charter (id)
+  primary key (group_id, chatter_id),
+  constraint fk_chatterid
+  foreign key (chatter_id) references t_chatter (id)
     on update cascade
     on delete cascade,
   constraint fk_groupid
