@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 
 /**
@@ -42,7 +44,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public Object login(String account,String pwd,String imei) throws BizException {
+    public Object login(String account,String pwd,String imei) throws BizException, UnsupportedEncodingException {
         if(account==null || account.trim().isEmpty()){
             throw new BizException("账号不能为空");
         }
@@ -54,7 +56,7 @@ public class LoginController {
         return Jwts.builder()
                 .claim("chatterId", chatter.getId())
                 .claim("account", chatter.getAccount())
-                .claim("nickname", chatter.getNickname())
+                .claim("nickname", URLEncoder.encode(chatter.getNickname(),"UTF-8"))
                 .claim("imei",imei)
                 .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, Constant.SECRET_KEY)

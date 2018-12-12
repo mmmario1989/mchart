@@ -6,6 +6,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 import lombok.Data;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 /**
  * @Author: mario
  * @Date: 2018-09-30 11:08 PM
@@ -38,7 +41,7 @@ public class LoginContext {
         context.set(loginContext);
     }
 
-    public static void authorize(String token){
+    public static void authorize(String token) throws UnsupportedEncodingException {
         if(token==null){
             throw new SignatureException("null token");
         }
@@ -47,7 +50,7 @@ public class LoginContext {
         set(
                 claims.get("chatterId",Integer.class),
                 claims.get("account",String.class),
-                claims.get("nickname",String.class),
+                URLDecoder.decode(claims.get("nickname",String.class),"UTF-8"),
                 claims.get("imei",String.class)
         );
     }

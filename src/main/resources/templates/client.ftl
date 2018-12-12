@@ -84,7 +84,7 @@
                      base64 = new Base64();
                      info = JSON.parse(base64.decode(res.data.split('.')[1]).replace('\0', ''));
                      fromAccount = info.account;
-                     fromNickname = info.nickname;
+                     fromNickname = decodeURI(info.nickname);
                      connect();
                      alert("登录成功");
                  } else {
