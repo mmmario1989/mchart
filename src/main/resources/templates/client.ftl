@@ -17,9 +17,10 @@
 
          function connect() {
              var domain = document.domain;
-             console.log(domain);
+             var proto = document.location.protocol;
              var token = localStorage.getItem("token");
-             websocket = new WebSocket("wss://"+domain+"/connect/" + token);
+             var wsProto = proto.startsWith('https')?'wss://':'ws://';
+             websocket = new WebSocket(wsProto+domain+"/connect/" + token);
              //连接发生错误的回调方法
              websocket.onerror = function () {
                  setMessageInnerHTML("WebSocket连接发生错误");
